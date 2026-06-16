@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Doctors Bingo — Life Wins With A Doctor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FBF6EC;
+    --paper:#FFFDF8;
+    --navy:#1E3354;
+    --navy-deep:#13233D;
+    --coral:#F2645B;
+    --teal:#3FBFB5;
+    --yellow:#FFC94D;
+    --violet:#9C8FE0;
+    --pink:#FF9EBC;
+    --green:#34C77B;
+    --green-deep:#1E9E5D;
+    --ink:#233047;
+    --line:rgba(30,51,84,.12);
+    --shadow:0 10px 30px rgba(30,51,84,.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--cream);
+    color:var(--ink);
+    font-family:'Plus Jakarta Sans',system-ui,sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{max-width:1080px;margin:0 auto;padding:18px;}
+
+  /* ---------- JOIN GATE ---------- */
+  .join-gate{
+    position:fixed;inset:0;z-index:100;
+    background:linear-gradient(160deg,var(--navy-deep),var(--navy));
+    display:flex;align-items:center;justify-content:center;
+    padding:24px;
+  }
+  .join-card{
+    background:var(--paper);border-radius:24px;padding:34px 30px;
+    max-width:420px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);
+    position:relative;overflow:hidden;
+  }
+  .join-card .heart{font-size:2.4rem;}
+  .join-card h1{
+    font-family:'Fredoka',sans-serif;font-size:1.9rem;margin:6px 0 2px;
+    letter-spacing:.02em;color:var(--navy);
+  }
+  .join-card p{font-size:.92rem;color:#5b6b85;margin:8px 0 18px;line-height:1.5;}
+  .join-card input{
+    width:100%;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);
+    font-family:inherit;font-size:.95rem;margin-bottom:10px;background:var(--cream);
+  }
+  .join-card input:focus{outline:2px solid var(--teal);border-color:transparent;}
+  .join-btn{
+    width:100%;padding:13px;border:none;border-radius:12px;
+    background:linear-gradient(135deg,var(--teal),#2fa39a);color:#fff;font-weight:700;
+    font-size:1rem;font-family:'Fredoka',sans-serif;cursor:pointer;letter-spacing:.02em;
+    transition:transform .15s;
+  }
+  .join-btn:hover{transform:translateY(-1px);}
+  .join-live{
+    margin-top:14px;font-size:.78rem;color:#8893a8;font-family:'JetBrains Mono',monospace;
+  }
+  .join-live b{color:var(--coral);}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;
+    gap:14px;padding:20px 4px 8px;
+  }
+  .badge{
+    background:var(--navy);color:#fff;border-radius:16px;padding:14px 16px;
+    font-size:.78rem;font-weight:600;max-width:175px;line-height:1.4;
+    box-shadow:var(--shadow);
+  }
+  .badge .heart{font-size:1.3rem;display:block;margin-bottom:4px;}
+  .badge .tag{display:block;margin-top:6px;color:var(--yellow);font-family:'JetBrains Mono',monospace;font-size:.7rem;letter-spacing:.05em;}
+  .title-wrap{text-align:center;flex:1;min-width:260px;}
+  .title-wrap .doctors{
+    font-family:'Fredoka',sans-serif;font-weight:600;font-size:2.1rem;color:var(--navy);
+    letter-spacing:.06em;
+  }
+  .bingo-letters-title{display:flex;justify-content:center;gap:8px;margin:6px 0 10px;flex-wrap:wrap;}
+  .bingo-letters-title span{
+    font-family:'Fredoka',sans-serif;font-weight:700;font-size:2.3rem;color:#fff;
+    width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    box-shadow:var(--shadow);
+  }
+  .title-wrap .sub{
+    font-size:.78rem;letter-spacing:.18em;font-weight:700;color:#5b6b85;text-transform:uppercase;
+  }
+
+  /* ---------- EMROK HERO BADGE ---------- */
+  .emrok-badge{
+    background:var(--paper);border:1.5px solid var(--line);border-radius:16px;padding:14px 16px;
+    max-width:190px;text-align:right;box-shadow:var(--shadow);
+  }
+  .emrok-badge .brand{
+    font-family:'Fredoka',sans-serif;font-weight:700;font-size:1.05rem;color:var(--navy);
+    letter-spacing:.03em;display:flex;align-items:center;justify-content:flex-end;gap:6px;
+  }
+  .emrok-badge .brand .pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse-dot 1.4s infinite;}
+  .emrok-badge .powered{
+    font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:#8893a8;margin-top:3px;
+    font-family:'JetBrains Mono',monospace;
+  }
+  .emrok-badge .line{font-size:.76rem;color:#5b6b85;font-style:italic;margin-top:6px;line-height:1.4;}
+  @media (max-width:680px){
+    .badge{margin:0 auto;text-align:center;}
+    .emrok-badge{margin:0 auto;text-align:center;}
+    .emrok-badge .brand{justify-content:center;}
+  }
+
+  /* ---------- TABS ---------- */
+  .tabs{display:flex;gap:8px;justify-content:center;padding-bottom:6px;margin:18px 0 16px;}
+  .tab-btn{
+    flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;
+    padding:10px 20px;font-family:'Fredoka',sans-serif;font-weight:600;font-size:.9rem;
+    color:var(--navy);cursor:pointer;white-space:nowrap;transition:.15s;
+  }
+  .tab-btn.active{background:var(--navy);color:#fff;border-color:var(--navy);}
+
+  /* ---------- PANELS / CARDS ---------- */
+  .panel{display:none;animation:fade .25s ease;}
+  .panel.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(4px);}to{opacity:1;transform:translateY(0);}}
+  .card{background:var(--paper);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin-bottom:16px;}
+  .card h3{font-family:'Fredoka',sans-serif;margin:0 0 8px;font-size:1.05rem;color:var(--navy);}
+  .card p.desc{font-size:.85rem;color:#5b6b85;margin:0 0 12px;line-height:1.5;}
+
+  /* ---------- BINGO GRID ---------- */
+  .bingo-letters{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:6px;}
+  .bingo-letters span{
+    text-align:center;font-family:'Fredoka',sans-serif;font-weight:700;color:#fff;
+    border-radius:10px;padding:6px 0;font-size:.95rem;
+  }
+  .bingo-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+  .cell{
+    position:relative;background:var(--paper);border:1.5px solid var(--line);border-radius:12px;
+    aspect-ratio:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;gap:4px;cursor:pointer;padding:6px;transition:.18s;
+  }
+  .cell:hover{border-color:var(--teal);}
+  .cell .num{
+    position:absolute;top:5px;left:5px;width:17px;height:17px;border-radius:50%;
+    font-family:'JetBrains Mono',monospace;font-size:.6rem;color:#fff;font-weight:700;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .cell .icon{font-size:1.4rem;}
+  .cell .txt{font-size:.62rem;line-height:1.15;font-weight:600;color:var(--ink);}
+  .cell.marked{background:linear-gradient(135deg,var(--green),var(--green-deep));}
+  .cell.marked .txt{color:#fff;}
+  .cell.marked::after{
+    content:"✓";position:absolute;bottom:4px;right:6px;font-size:.95rem;color:#fff;font-weight:800;
+  }
+  .cell.free{background:linear-gradient(135deg,var(--pink),var(--coral));color:#fff;}
+  .cell.free .txt{color:#fff;font-family:'Fredoka',sans-serif;font-weight:700;font-size:.68rem;}
+  .cell.win{box-shadow:0 0 0 3px var(--yellow),0 0 18px rgba(255,201,77,.85);animation:winpulse 1s infinite;}
+  @keyframes winpulse{0%,100%{transform:scale(1);}50%{transform:scale(1.04);}}
+  @media (max-width:480px){
+    .cell .txt{font-size:.55rem;}
+    .cell .icon{font-size:1.1rem;}
+    .bingo-letters span{font-size:.8rem;}
+  }
+
+  /* ---------- BINGO FLIP — EMOTIONAL REVEAL ---------- */
+  .bingo-flip-wrapper{display:none;margin-top:18px;perspective:1200px;}
+  .bingo-flip-wrapper.show{display:block;animation:fade .3s ease;}
+  .bingo-flip-card{
+    position:relative;width:100%;min-height:300px;transform-style:preserve-3d;
+    transition:transform 1.1s cubic-bezier(.4,.2,.2,1);
+  }
+  .bingo-flip-card.flip{transform:rotateY(180deg);}
+  .bingo-front,.bingo-back{
+    position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    text-align:center;padding:28px 22px;overflow:hidden;
+  }
+  .bingo-front{background:linear-gradient(135deg,var(--yellow),var(--coral));color:var(--navy-deep);}
+  .bingo-front h3{font-family:'Fredoka',sans-serif;font-size:1.6rem;margin:0 0 8px;}
+  .bingo-front p{margin:0;font-weight:600;font-size:.9rem;}
+  .bingo-back{background:linear-gradient(160deg,var(--navy-deep),var(--navy));color:#fff;transform:rotateY(180deg);}
+  .bingo-back .ecg-bg{position:absolute;inset:0;width:200%;height:100%;opacity:.14;animation:scroll-ecg 9s linear infinite;}
+  .bingo-back .ecg-bg path{fill:none;stroke:var(--teal);stroke-width:2;}
+  .bingo-back .heart-pulse{font-size:1.9rem;animation:heartbeat 1.3s infinite;margin-bottom:4px;position:relative;z-index:1;}
+  @keyframes heartbeat{0%,100%{transform:scale(1);}25%{transform:scale(1.2);}40%{transform:scale(1);}55%{transform:scale(1.12);}}
+  .bingo-back h3{font-family:'Fredoka',sans-serif;color:var(--yellow);font-size:1.25rem;margin:2px 0 12px;position:relative;z-index:1;}
+  .bingo-back p{font-size:.92rem;line-height:1.75;position:relative;z-index:1;margin:0;max-width:440px;}
+  .emrok-salute{
+    margin-top:16px;font-weight:700;letter-spacing:.04em;color:#9be38a;
+    font-family:'Fredoka',sans-serif;font-size:.95rem;position:relative;z-index:1;
+  }
+
+  .row-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;justify-content:center;}
+  .btn{
+    border:none;border-radius:10px;padding:10px 16px;font-family:'Fredoka',sans-serif;
+    font-weight:600;font-size:.85rem;cursor:pointer;transition:.15s;
+  }
+  .btn:hover{transform:translateY(-1px);}
+  .btn-ghost{background:transparent;border:1.5px solid var(--line);color:var(--navy);}
+
+  /* ---------- LIVE MONITOR (Live Tracking tab) ---------- */
+  .vitals{
+    position:relative;background:var(--navy-deep);border-radius:20px;padding:22px 20px;
+    margin-bottom:16px;overflow:hidden;color:#fff;box-shadow:var(--shadow);
+  }
+  .vitals-ecg{position:absolute;top:0;left:0;height:100%;width:200%;opacity:.18;
+    animation:scroll-ecg 9s linear infinite;}
+  .vitals-ecg path{fill:none;stroke:var(--teal);stroke-width:2;}
+  @keyframes scroll-ecg{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+  .vitals-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;position:relative;z-index:1;}
+  .vitals-head h2{font-family:'Fredoka',sans-serif;font-weight:600;font-size:1.05rem;margin:0;letter-spacing:.04em;}
+  .live{display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:.72rem;letter-spacing:.1em;color:var(--teal);}
+  .live .dot{width:8px;height:8px;border-radius:50%;background:var(--coral);animation:pulse-dot 1.4s infinite;}
+  @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(1.4);}}
+  .vitals-grid{position:relative;z-index:1;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:16px;text-align:center;}
+  .vital .num{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:2.2rem;line-height:1;}
+  .vital .label{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;opacity:.65;margin-top:4px;}
+  .vital.players .num{color:var(--teal);}
+  .vital.bingos .num{color:var(--yellow);}
+  .vital.engage .num{color:var(--pink);}
+  .vital.lives .num{color:#9be38a;}
+
+  .activity-feed{list-style:none;margin:0;padding:0;max-height:260px;overflow-y:auto;}
+  .activity-feed li{
+    padding:9px 0;border-bottom:1px dashed var(--line);font-size:.82rem;display:flex;gap:8px;
+    align-items:flex-start;
+  }
+  .activity-feed li:last-child{border-bottom:none;}
+  .activity-feed time{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:#8893a8;flex:0 0 auto;margin-top:2px;}
+  .empty{font-size:.82rem;color:#8893a8;font-style:italic;}
+
+  .toast{
+    position:fixed;bottom:18px;left:50%;transform:translateX(-50%) translateY(20px);
+    background:var(--navy);color:#fff;padding:9px 18px;border-radius:999px;font-size:.8rem;
+    font-family:'Fredoka',sans-serif;opacity:0;transition:.25s;pointer-events:none;z-index:200;
+  }
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  .footnote{text-align:center;font-size:.72rem;color:#8893a8;margin:18px 0 6px;font-family:'JetBrains Mono',monospace;letter-spacing:.03em;line-height:1.6;}
+
+  @media (prefers-reduced-motion: reduce){
+    .bingo-flip-card{transition:none;}
+    .heart-pulse{animation:none;}
+    .pulse-dot{animation:none;}
+    .vitals-ecg, .ecg-bg{animation:none;}
+    .cell.win{animation:none;}
+    .live .dot{animation:none;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- JOIN GATE -->
+  <div class="join-gate" id="joinGate">
+    <div class="join-card">
+      <span class="heart">❤️🩺</span>
+      <h1>Doctors Bingo</h1>
+      <p>25 moments only doctors understand — celebrating you this Doctors' Day. Enter your name to join the live board and start playing.</p>
+      <input type="text" id="playerName" placeholder="Your name" maxlength="24" />
+      <input type="text" id="playerDept" placeholder="Department / hospital (optional)" maxlength="30" />
+      <button class="join-btn" onclick="joinGame()">Join &amp; Play 🎯</button>
+      <div class="join-live" id="joinLive">👥 Loading live count…</div>
+    </div>
+  </div>
+
+  <div class="app">
+    <!-- HERO -->
+    <header class="hero">
+      <div class="badge">
+        <span class="heart">❤️</span>
+        We don't just treat illnesses, we touch lives.
+        <span class="tag">#LifeWins</span>
+      </div>
+      <div class="title-wrap">
+        <div class="doctors">DOCTORS</div>
+        <div class="bingo-letters-title">
+          <span style="background:var(--teal)">B</span>
+          <span style="background:var(--coral)">I</span>
+          <span style="background:var(--yellow);color:var(--navy)">N</span>
+          <span style="background:var(--violet)">G</span>
+          <span style="background:var(--pink)">O</span>
+        </div>
+        <div class="sub">25 moments only doctors understand</div>
+      </div>
+      <div class="emrok-badge">
+        <div class="brand"><span class="pulse-dot"></span>EMROK®</div>
+        <div class="powered">Powered by EMROK®</div>
+        <div class="line">Fighting infections.<br>Protecting lives.</div>
+      </div>
+    </header>
+
+    <!-- TABS -->
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="bingo" onclick="showTab('bingo')">🎯 Bingo Board</button>
+      <button class="tab-btn" data-tab="livetrack" onclick="showTab('livetrack')">📺 Live Tracking</button>
+    </nav>
+
+    <main>
+      <!-- BINGO PANEL -->
+      <section class="panel active" id="panel-bingo">
+        <div class="card">
+          <h3>🎯 Today's Bingo Board</h3>
+          <p class="desc">Tap a square the moment it happens to you. Get 5 in a row — across, down, or diagonal — and call BINGO!</p>
+          <div class="bingo-letters">
+            <span style="background:var(--teal)">B</span>
+            <span style="background:var(--coral)">I</span>
+            <span style="background:var(--yellow);color:var(--navy)">N</span>
+            <span style="background:var(--violet)">G</span>
+            <span style="background:var(--pink)">O</span>
+          </div>
+          <div class="bingo-grid" id="bingoGrid"></div>
+
+          <!-- FLIP REVEAL -->
+          <div class="bingo-flip-wrapper" id="bingoBanner">
+            <div class="bingo-flip-card" id="bingoFlipCard">
+              <div class="bingo-front">
+                <h3>🎉 BINGO COMPLETE 🎉</h3>
+                <p>You completed the doctor journey.</p>
+              </div>
+              <div class="bingo-back">
+                <svg class="ecg-bg" viewBox="0 0 800 60" preserveAspectRatio="none">
+                  <path d="M0,30 L60,30 L75,8 L90,52 L105,30 L200,30 L215,8 L230,52 L245,30 L340,30 L355,8 L370,52 L385,30 L480,30 L495,8 L510,52 L525,30 L620,30 L635,8 L650,52 L665,30 L760,30 L775,8 L790,52 L800,30"/>
+                  <path d="M0,30 L60,30 L75,8 L90,52 L105,30 L200,30 L215,8 L230,52 L245,30 L340,30 L355,8 L370,52 L385,30 L480,30 L495,8 L510,52 L525,30 L620,30 L635,8 L650,52 L665,30 L760,30 L775,8 L790,52 L800,30" transform="translate(800,0)"/>
+                </svg>
+                <div class="heart-pulse">❤️</div>
+                <h3>Every Square Has A Story</h3>
+                <p>
+                  Every square represents a moment only a doctor understands.<br><br>
+                  Every decision, every hour, every fight against infection…<br>
+                  is a step towards saving a life.<br><br>
+                  🩺 Thank you for being the reason countless hearts keep beating.
+                </p>
+                <div class="emrok-salute">EMROK® salutes the doctors<br>who never stop fighting for life.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row-actions">
+            <button class="btn btn-ghost" onclick="resetBoard()">↺ Reset my board</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE TRACKING PANEL -->
+      <section class="panel" id="panel-livetrack">
+        <div class="vitals">
+          <svg class="vitals-ecg" viewBox="0 0 800 60" preserveAspectRatio="none">
+            <path d="M0,30 L60,30 L75,8 L90,52 L105,30 L200,30 L215,8 L230,52 L245,30 L340,30 L355,8 L370,52 L385,30 L480,30 L495,8 L510,52 L525,30 L620,30 L635,8 L650,52 L665,30 L760,30 L775,8 L790,52 L800,30"/>
+            <path d="M0,30 L60,30 L75,8 L90,52 L105,30 L200,30 L215,8 L230,52 L245,30 L340,30 L355,8 L370,52 L385,30 L480,30 L495,8 L510,52 L525,30 L620,30 L635,8 L650,52 L665,30 L760,30 L775,8 L790,52 L800,30" transform="translate(800,0)"/>
+          </svg>
+          <div class="vitals-head">
+            <h2>❤️ Live Doctor Engagement</h2>
+            <span class="live"><span class="dot"></span>LIVE</span>
+          </div>
+          <div class="vitals-grid">
+            <div class="vital players"><div class="num" id="vp-players">0</div><div class="label">Doctors Playing</div></div>
+            <div class="vital bingos"><div class="num" id="vp-bingos">0</div><div class="label">Bingos Completed</div></div>
+            <div class="vital engage"><div class="num" id="vp-engage">0</div><div class="label">Squares Marked</div></div>
+            <div class="vital lives"><div class="num">∞</div><div class="label">Lives Impacted</div></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>📡 Live Activity Feed</h3>
+          <p class="desc">Pop this on a lobby screen or shared monitor — it updates live as doctors play.</p>
+          <ul class="activity-feed" id="activityFeed"><li class="empty">Waiting for activity…</li></ul>
+          <div class="row-actions">
+            <button class="btn btn-ghost" onclick="toggleFullscreen()">⛶ Toggle fullscreen</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <div class="footnote">EMROK® celebrates doctors who fight infections and save lives.<br>Built for #DoctorsBingo · #HappyDoctorsDay</div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+const COLORS = ['var(--teal)','var(--coral)','var(--yellow)','var(--violet)','var(--pink)'];
+const BINGO_ITEMS = [
+  {icon:"⏰", text:"Worked a 24+ hour shift"},
+  {icon:"🥡", text:"Eaten cold food (again!)"},
+  {icon:"🚨", text:"Rushed for an emergency call"},
+  {icon:"📋", text:"Explained the same thing 10 times today"},
+  {icon:"☕", text:"Survived on coffee"},
+  {icon:"🌙", text:"Worked more nights than days"},
+  {icon:"👨‍👩‍👧", text:"Missed a family event"},
+  {icon:"🧩", text:"Handled a difficult patient with patience"},
+  {icon:"🙏", text:"Got a thank-you that made your day"},
+  {icon:"💔", text:"Had a patient's pain stay with you"},
+  {icon:"📞", text:"Got an emergency call on a day off"},
+  {icon:"❓", text:"Didn't know the diagnosis immediately"},
+  {icon:"❤️", text:"FREE SPACE", free:true},
+  {icon:"📚", text:"Kept learning, even exhausted"},
+  {icon:"😓", text:"Made a tough decision"},
+  {icon:"🛡️", text:"Fought an infection relentlessly"},
+  {icon:"🤝", text:"Worked with an amazing team"},
+  {icon:"😊", text:"Watched a patient improve & felt grateful"},
+  {icon:"😷", text:"Wore a mask for the entire shift"},
+  {icon:"📵", text:"Kept your phone on silent, always"},
+  {icon:"🩹", text:"Got a hug from a patient"},
+  {icon:"📑", text:"Completed mountains of paperwork"},
+  {icon:"🩺", text:"Treated someone who became like family"},
+  {icon:"😔", text:"Felt helpless at times"},
+  {icon:"💚", text:"Chose medicine, knowing the hard journey"}
+];
+const WIN_LINES = [
+  [0,1,2,3,4],[5,6,7,8,9],[10,11,12,13,14],[15,16,17,18,19],[20,21,22,23,24],
+  [0,5,10,15,20],[1,6,11,16,21],[2,7,12,17,22],[3,8,13,18,23],[4,9,14,19,24],
+  [0,6,12,18,24],[4,8,12,16,20]
+];
+
+const DEFAULT_STATS = {
+  totalPlayers:0, totalBingos:0, engagementMarks:0,
+  activity:[]
+};
+const STATS_KEY = "emrok_doctors_bingo_stats_v1";
+
+/* ================= STORAGE WRAPPER ================= */
+const memoryFallback = { stats: null };
+async function loadStats(){
+  try{
+    if(window.storage){
+      const r = await window.storage.get(STATS_KEY, true);
+      if(r && r.value) return JSON.parse(r.value);
+    }
+  }catch(e){}
+  return memoryFallback.stats ? memoryFallback.stats : JSON.parse(JSON.stringify(DEFAULT_STATS));
+}
+async function saveStats(stats){
+  memoryFallback.stats = stats;
+  try{
+    if(window.storage) await window.storage.set(STATS_KEY, JSON.stringify(stats), true);
+  }catch(e){}
+}
+
+/* ================= STATE ================= */
+let stats = JSON.parse(JSON.stringify(DEFAULT_STATS));
+let board = Array(25).fill(false); board[12] = true;
+let countedLines = new Set();
+let currentPlayer = "A doctor";
+let lastBingoLine = null;
+
+/* ================= INIT ================= */
+(async function init(){
+  stats = await loadStats();
+  const live = document.getElementById('joinLive');
+  live.innerHTML = `👥 <b>${stats.totalPlayers}</b> doctors have joined so far`;
+  renderAll();
+  setInterval(async ()=>{
+    stats = await loadStats();
+    renderLiveTrack();
+  }, 7000);
+})();
+
+function joinGame(){
+  const nameEl = document.getElementById('playerName');
+  const deptEl = document.getElementById('playerDept');
+  let name = nameEl.value.trim();
+  if(!name) name = "A doctor";
+  currentPlayer = name;
+  const dept = deptEl.value.trim();
+  stats.totalPlayers += 1;
+  pushActivity(`👋 ${name}${dept ? ' ('+dept+')' : ''} joined the challenge`);
+  saveStats(stats);
+  document.getElementById('joinGate').style.display = 'none';
+  showToast(`Welcome, ${name} 🎯`);
+  renderAll();
+}
+
+function pushActivity(msg){
+  const time = new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  stats.activity = stats.activity || [];
+  stats.activity.unshift({msg, time});
+  if(stats.activity.length > 15) stats.activity = stats.activity.slice(0,15);
+}
+
+/* ================= TABS ================= */
+function showTab(name){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.toggle('active', p.id==='panel-'+name));
+}
+
+/* ================= BINGO ================= */
+function renderGrid(){
+  const grid = document.getElementById('bingoGrid');
+  grid.innerHTML = '';
+  const winningCells = new Set();
+  WIN_LINES.forEach(line=>{
+    if(line.every(i=>board[i])) line.forEach(i=>winningCells.add(i));
+  });
+  BINGO_ITEMS.forEach((item, i)=>{
+    const cell = document.createElement('div');
+    cell.className = 'cell';
+    if(item.free) cell.classList.add('free');
+    if(board[i] && !item.free) cell.classList.add('marked');
+    if(winningCells.has(i)) cell.classList.add('win');
+    const color = COLORS[i % 5];
+    cell.innerHTML = `<span class="num" style="background:${color}">${i+1}</span>
+      <span class="icon">${item.icon}</span>
+      <span class="txt">${item.text}</span>`;
+    if(!item.free){
+      cell.addEventListener('click', ()=>toggleCell(i));
+    }
+    grid.appendChild(cell);
+  });
+}
+
+async function toggleCell(i){
+  board[i] = !board[i];
+  if(board[i]){
+    stats.engagementMarks = (stats.engagementMarks||0) + 1;
+    saveStats(stats);
+  }
+  checkBingo();
+  renderGrid();
+  renderLiveTrack();
+}
+
+async function checkBingo(){
+  for(const line of WIN_LINES){
+    const key = line.join('-');
+    if(line.every(i=>board[i]) && !countedLines.has(key)){
+      countedLines.add(key);
+      lastBingoLine = line;
+      stats.totalBingos = (stats.totalBingos||0) + 1;
+      pushActivity(`🎉 ${currentPlayer} called BINGO!`);
+      await saveStats(stats);
+
+      const banner = document.getElementById('bingoBanner');
+      const flipCard = document.getElementById('bingoFlipCard');
+      banner.classList.add('show');
+      flipCard.classList.remove('flip');
+      setTimeout(()=>{ flipCard.classList.add('flip'); }, 700);
+
+      showToast('🎉 BINGO! Your moment has been recorded ❤️');
+      renderLiveTrack();
+    }
+  }
+}
+
+function resetBoard(){
+  board = Array(25).fill(false); board[12] = true;
+  countedLines = new Set();
+  lastBingoLine = null;
+  const banner = document.getElementById('bingoBanner');
+  const flipCard = document.getElementById('bingoFlipCard');
+  banner.classList.remove('show');
+  flipCard.classList.remove('flip');
+  renderGrid();
+}
+
+/* ================= LIVE TRACKING ================= */
+function renderLiveTrack(){
+  document.getElementById('vp-players').textContent = stats.totalPlayers||0;
+  document.getElementById('vp-bingos').textContent = stats.totalBingos||0;
+  document.getElementById('vp-engage').textContent = stats.engagementMarks||0;
+
+  const feed = document.getElementById('activityFeed');
+  const items = stats.activity || [];
+  if(!items.length){
+    feed.innerHTML = '<li class="empty">Waiting for activity…</li>';
+  }else{
+    feed.innerHTML = items.map(a=>`<li><time>${a.time}</time><span>${escapeHtml(a.msg)}</span></li>`).join('');
+  }
+}
+
+function escapeHtml(s){
+  const d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
+function toggleFullscreen(){
+  try{
+    if(!document.fullscreenElement){
+      document.documentElement.requestFullscreen?.();
+    }else{
+      document.exitFullscreen?.();
+    }
+  }catch(e){}
+}
+
+/* ================= TOAST ================= */
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1800);
+}
+
+/* ================= RENDER ALL ================= */
+function renderAll(){
+  renderGrid();
+  renderLiveTrack();
+}
+</script>
+</body>
+</html>
