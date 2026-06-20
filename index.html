@@ -464,25 +464,51 @@ const DEFAULT_STATS = {
   activity:[]
 };
 const STATS_KEY = "emrok_doctors_bingo_stats_v1";
+/* ================= FIREBASE STORAGE ================= */
 
-/* ================= STORAGE WRAPPER ================= */
-const memoryFallback = { stats: null };
+
 async function loadStats(){
-  try{
-    if(window.storage){
-      const r = await window.storage.get(STATS_KEY, true);
-      if(r && r.value) return JSON.parse(r.value);
-    }
-  }catch(e){}
-  return memoryFallback.stats ? memoryFallback.stats : JSON.parse(JSON.stringify(DEFAULT_STATS));
-}
-async function saveStats(stats){
-  memoryFallback.stats = stats;
-  try{
-    if(window.storage) await window.storage.set(STATS_KEY, JSON.stringify(stats), true);
-  }catch(e){}
+
+return new Promise(resolve=>{
+
+firebaseOnValue(
+firebaseRef(firebaseDB,"bingo/stats"),
+
+(snapshot)=>{
+
+let data=snapshot.val();
+
+if(data){
+
+resolve(data);
+
+}else{
+
+resolve(JSON.parse(JSON.stringify(DEFAULT_STATS)));
+
 }
 
+},
+{
+onlyOnce:true
+}
+
+);
+
+});
+
+}
+
+
+
+async function saveStats(stats){
+
+await firebaseSet(
+firebaseRef(firebaseDB,"bingo/stats"),
+stats
+);
+
+}
 /* ================= STATE ================= */
 let stats = JSON.parse(JSON.stringify(DEFAULT_STATS));
 let board = Array(25).fill(false); board[12] = true;
