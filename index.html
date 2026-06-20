@@ -383,7 +383,47 @@
 
   <div class="toast" id="toast"></div>
 
-<script>
+<scripttype="module">
+  import { initializeApp } 
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+
+import { 
+getDatabase,
+ref,
+set,
+onValue
+}
+from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseConfig = {
+
+apiKey: "AIzaSyDhlyfCUAbVmhFbLQ9t8G-35SUMX3cqAiw",
+
+authDomain: "doctor-day-bingo.firebaseapp.com",
+
+databaseURL: "https://doctor-day-bingo-default-rtdb.asia-southeast1.firebasedatabase.app",
+
+projectId: "doctor-day-bingo",
+
+storageBucket: "doctor-day-bingo.firebasestorage.app",
+
+messagingSenderId: "413668728685",
+
+appId: "1:413668728685:web:e7ead9b55390a95fa80464"
+
+};
+
+
+const app = initializeApp(firebaseConfig);
+
+const database = getDatabase(app);
+
+
+window.firebaseDB = database;
+window.firebaseRef = ref;
+window.firebaseSet = set;
+window.firebaseOnValue = onValue;
 /* ================= DATA ================= */
 const COLORS = ['var(--teal)','var(--coral)','var(--yellow)','var(--violet)','var(--pink)'];
 const BINGO_ITEMS = [
