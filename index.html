@@ -522,10 +522,18 @@ let lastBingoLine = null;
   const live = document.getElementById('joinLive');
   live.innerHTML = `👥 <b>${stats.totalPlayers}</b> doctors have joined so far`;
   renderAll();
-  setInterval(async ()=>{
-    stats = await loadStats();
-    renderLiveTrack();
-  }, 7000);
+firebaseOnValue(
+firebaseRef(firebaseDB,"bingo/stats"),
+
+(snapshot)=>{
+
+stats = snapshot.val() || DEFAULT_STATS;
+
+renderAll();
+
+}
+
+); 
 })();
 
 function joinGame(){
